@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pemilihan Raya Online 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-800: #123c73;
+    --blue-700: #1e4f8f;
+    --blue-600: #2b6cb0;
+    --blue-500: #3b82c4;
+    --blue-100: #e3edf7;
+    --teal-500: #1e9e7e;
+    --teal-600: #157f66;
+    --teal-100: #dff3ec;
+    --teal-50: #eefaf5;
+    --amber-500: #eab308;
+    --ink: #1c2b3a;
+    --ink-soft: #55677a;
+    --paper: #f2f5f9;
+    --card: #ffffff;
+    --line: #dde6ee;
+    --radius: 18px;
+    --shadow-sm: 0 1px 2px rgba(28,43,58,.06), 0 2px 8px rgba(28,43,58,.05);
+    --shadow-lg: 0 16px 40px rgba(30,79,143,.16);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 60px; }
+
+  /* ============ HEADER ============ */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    background: linear-gradient(120deg, var(--blue-800) 0%, var(--blue-600) 55%, var(--teal-500) 130%);
+    color: #fff;
+    padding: clamp(24px, 4vw, 40px) clamp(22px, 4vw, 44px);
+    box-shadow: var(--shadow-lg);
+  }
+  /* lingkaran dekoratif lembut di kanan */
+  .hero::before, .hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,.07);
+  }
+  .hero::before { width: 340px; height: 340px; right: -80px; top: -120px; }
+  .hero::after  { width: 220px; height: 220px; right: 120px; bottom: -140px; }
+
+  .status-pill {
+    position: relative; z-index: 1;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-size: .78rem; font-weight: 700;
+    letter-spacing: .04em;
+  }
+  .status-pill::before {
+    content: "";
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #4ade80;
+    animation: berkedip 1.6s ease-in-out infinite;
+  }
+  @keyframes berkedip { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+  .hero h1 {
+    position: relative; z-index: 1;
+    margin-top: 16px;
+    font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+    font-weight: 800;
+  }
+  .hero p.sub {
+    position: relative; z-index: 1;
+    margin-top: 6px;
+    font-size: .95rem;
+    opacity: .88;
+  }
+
+  .countdown { position: relative; z-index: 1; display: flex; gap: 12px; margin-top: 22px; }
+  .cd-box {
+    min-width: 72px;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 14px;
+    padding: 10px 14px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+  }
+  .cd-box b { display: block; font-size: 1.5rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .cd-box span { font-size: .68rem; opacity: .8; }
+
+  /* ============ STATS STRIP ============ */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    padding: 20px 16px;
+  }
+  .stat b { display: block; font-size: 1.9rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .stat.biru b { color: var(--blue-600); }
+  .stat.hijau b { color: var(--teal-500); }
+  .stat span { font-size: .82rem; color: var(--ink-soft); }
+
+  /* ============ KANDIDAT ============ */
+  .section-title { font-size: 1.15rem; font-weight: 800; margin: 34px 0 16px; }
+  .section-title span { color: var(--blue-600); }
+
+  .kandidat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .kartu {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 28px 24px 24px;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .kartu:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .kartu.unggul { border: 1.5px solid var(--teal-500); background: linear-gradient(180deg, var(--teal-50), var(--card) 45%); }
+  .kartu.terpilih { outline: 3px solid var(--blue-500); outline-offset: -3px; }
+
+  .badge-no {
+    position: absolute; top: 18px; left: 18px;
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: .85rem;
+    border-radius: 12px;
+    background: var(--blue-100); color: var(--blue-700);
+  }
+  .kartu.unggul .badge-no { background: var(--teal-100); color: var(--teal-600); }
+
+  .crown {
+    position: absolute; top: 14px; right: 18px;
+    font-size: 1.5rem;
+    filter: drop-shadow(0 3px 6px rgba(234,179,8,.45));
+    animation: goyang 2.4s ease-in-out infinite;
+  }
+  @keyframes goyang { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+
+  .foto {
+    width: 108px; height: 108px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 3rem;
+    background: var(--blue-100);
+    border: 4px solid #fff;
+    box-shadow: 0 0 0 2px var(--blue-500), var(--shadow-sm);
+    margin: 14px 0 16px;
+  }
+  .kartu.unggul .foto { background: var(--teal-100); box-shadow: 0 0 0 2px var(--teal-500), var(--shadow-sm); }
+
+  .kartu h3 { font-size: 1.15rem; font-weight: 800; }
+  .kartu .jabatan { font-size: .8rem; color: var(--ink-soft); margin: 3px 0 12px; }
+  .kartu .visi { font-size: .85rem; color: var(--ink-soft); line-height: 1.55; min-height: 42px; }
+
+  .bar-meta {
+    width: 100%;
+    display: flex; justify-content: space-between;
+    font-size: .82rem; font-weight: 700;
+    margin: 18px 0 8px;
+  }
+  .bar-meta .pct { color: var(--teal-600); }
+  .kartu:nth-child(2) .bar-meta .pct { color: var(--blue-600); }
+
+  .track { width: 100%; height: 10px; background: #e8eef4; border-radius: 999px; overflow: hidden; }
+  .fill { height: 100%; width: 0%; border-radius: 999px; background: var(--teal-500); transition: width .8s cubic-bezier(.22,1,.36,1); }
+  .kartu:nth-child(2) .fill { background: var(--blue-500); }
+
+  .btn-pilih {
+    margin-top: 20px;
+    width: 100%;
+    padding: 13px 16px;
+    font: inherit; font-weight: 700; font-size: .88rem;
+    color: #fff;
+    background: var(--teal-500);
+    border: none; border-radius: 999px;
+    cursor: pointer;
+    transition: background .2s ease, transform .1s ease;
+  }
+  .btn-pilih:nth-of-type(1) { background: var(--teal-500); }
+  .kartu:nth-child(2) .btn-pilih { background: var(--blue-600); }
+  .btn-pilih:hover { filter: brightness(1.08); }
+  .btn-pilih:active { transform: scale(.97); }
+  .btn-pilih.sudah { background: #b7c6d4; cursor: not-allowed; }
+  .kartu.terpilih .btn-pilih.sudah { background: var(--blue-600); }
+  .vote-note { margin-top: 10px; font-size: .74rem; color: var(--teal-600); font-weight: 600; min-height: 1em; }
+
+  /* ============ TIMELINE ============ */
+  .timeline {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 10px 24px;
+  }
+  .tl-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .tl-row:last-child { border-bottom: none; }
+  .tl-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9d6e2; flex-shrink: 0; }
+  .tl-row.selesai .tl-dot { background: var(--teal-500); }
+  .tl-row.aktif .tl-dot { background: var(--blue-600); box-shadow: 0 0 0 4px var(--blue-100); }
+  .tl-label { font-size: .9rem; color: var(--ink-soft); }
+  .tl-row.selesai .tl-label { color: var(--ink-soft); text-decoration: line-through; text-decoration-color: #b8c6d3; }
+  .tl-row.aktif .tl-label { color: var(--blue-600); font-weight: 800; }
+  .tl-sekarang { font-size: .74rem; font-weight: 700; color: var(--blue-600); background: var(--blue-100); padding: 3px 10px; border-radius: 999px; }
+  .tl-waktu { margin-left: auto; font-size: .8rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+  footer { text-align: center; padding: 26px; font-size: .75rem; color: var(--ink-soft); }
+
+  /* ============ MODAL KONFIRMASI ============ */
+  .modal-layer {
+    position: fixed; inset: 0;
+    background: rgba(18, 34, 51, .55);
+    display: none; place-items: center;
+    z-index: 50;
+    padding: 20px;
+  }
+  .modal-layer.tampil { display: grid; animation: muncul .2s ease; }
+  @keyframes muncul { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: var(--card);
+    border-radius: 20px;
+    max-width: 380px; width: 100%;
+    padding: 28px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    animation: naik .25s cubic-bezier(.22,1,.36,1);
+  }
+  @keyframes naik { from { transform: translateY(18px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal .foto-modal {
+    width: 76px; height: 76px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 2rem;
+    background: var(--blue-100); margin: 0 auto 14px;
+  }
+  .modal h3 { font-size: 1.1rem; font-weight: 800; }
+  .modal p { font-size: .85rem; color: var(--ink-soft); margin: 8px 0 20px; line-height: 1.55; }
+  .modal-aksi { display: flex; gap: 10px; }
+  .modal-aksi button {
+    flex: 1; padding: 12px;
+    font: inherit; font-weight: 700; font-size: .85rem;
+    border-radius: 999px; cursor: pointer;
+    transition: filter .2s ease;
+  }
+  .btn-batal { background: #eef3f8; color: var(--ink-soft); border: none; }
+  .btn-ya { background: var(--teal-500); color: #fff; border: none; }
+  .modal-aksi button:hover { filter: brightness(1.06); }
+
+  /* ============ CONFETTI ============ */
+  .confetti {
+    position: fixed;
+    top: -12px;
+    width: 9px; height: 14px;
+    z-index: 60;
+    pointer-events: none;
+    animation: jatuh linear forwards;
+  }
+  @keyframes jatuh {
+    to { transform: translateY(105vh) rotate(720deg); opacity: .9; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ===== HEADER ===== -->
+  <header class="hero">
+    <span class="status-pill">PEMILIHAN BERLANGSUNG</span>
+    <h1>Pemilihan Raya Online 2025</h1>
+    <p class="sub">Gunakan hak suara Anda — hasil dihitung secara real-time</p>
+    <div class="countdown" aria-label="Waktu tersisa">
+      <div class="cd-box"><b id="cd-j">02</b><span>Jam</span></div>
+      <div class="cd-box"><b id="cd-m">34</b><span>Menit</span></div>
+      <div class="cd-box"><b id="cd-d">17</b><span>Detik</span></div>
+    </div>
+  </header>
+
+  <!-- ===== STATS ===== -->
+  <section class="stats" aria-label="Statistik pemilihan">
+    <div class="stat biru"><b id="st-total">0</b><span>Total Suara</span></div>
+    <div class="stat biru"><b id="st-part">0%</b><span>Partisipasi</span></div>
+    <div class="stat hijau"><b id="st-unggul">—</b><span>Unggul Sementara</span></div>
+  </section>
+
+  <!-- ===== KANDIDAT ===== -->
+  <h2 class="section-title">Bilik Suara: <span>Kandidat Ketua &amp; Wakil</span></h2>
+  <div class="kandidat-grid">
+
+    <article class="kartu" id="kartu-1">
+      <span class="badge-no">01</span>
+      <span class="crown" id="crown-1" hidden>👑</span>
+      <div class="foto">🧑</div>
+      <h3>Andi &amp; Budi</h3>
+      <p class="jabatan">Paslon 01 · Ketua &amp; Wakil</p>
+      <p class="visi">Ekonomi kreatif, lingkungan bersih, kesejahteraan bersama</p>
+      <div class="bar-meta"><span class="pct" id="pct-1">0%</span><span id="suara-1">0 suara</span></div>
+      <div class="track"><div class="fill" id="bar-1"></div></div>
+      <button class="btn-pilih" data-kandidat="1" id="btn-1">Pilih Paslon 01</button>
+      <p class="vote-note" id="note-1"></p>
+    </article>
+
+    <article class="kartu" id="kartu-2">
+      <span class="badge-no">02</span>
+      <span class="crown" id="crown-2" hidden>👑</span>
+      <div class="foto">🧔</div>
+      <h3>Citra &amp; Dewi</h3>
+      <p class="jabatan">Paslon 02 · Ketua &amp; Wakil</p>
+      <p class="visi">Pendidikan digital, gotong royong, peluang kerja muda</p>
+      <div class="bar-meta"><span class="pct" id="pct-2">0%</span><span id="suara-2">0 suara</span></div>
+      <div class="track"><div class="fill" id="bar-2"></div></div>
+      <button class="btn-pilih" data-kandidat="2" id="btn-2">Pilih Paslon 02</button>
+      <p class="vote-note" id="note-2"></p>
+    </article>
+
+  </div>
+
+  <!-- ===== TIMELINE ===== -->
+  <h2 class="section-title">Timeline Pemilihan</h2>
+  <div class="timeline">
+    <div class="tl-row selesai"><span class="tl-dot"></span><span class="tl-label">Pendaftaran pemilih</span><span class="tl-waktu">08:00</span></div>
+    <div class="tl-row selesai"><span class="tl-dot"></span><span class="tl-label">Pemilihan dibuka</span><span class="tl-waktu">09:00</span></div>
+    <div class="tl-row aktif"><span class="tl-dot"></span><span class="tl-label">Voting berlangsung</span><span class="tl-sekarang">← sekarang</span><span class="tl-waktu">09:00–17:00</span></div>
+    <div class="tl-row"><span class="tl-dot"></span><span class="tl-label">Rekapitulasi suara</span><span class="tl-waktu">17:30</span></div>
+    <div class="tl-row"><span class="tl-dot"></span><span class="tl-label">Pengumuman resmi</span><span class="tl-waktu">18:00</span></div>
+  </div>
+
+</div>
+
+<footer>Pemilihan Raya Online 2025 — suara pemantau disimulasikan secara lokal untuk demo.</footer>
+
+<!-- ===== MODAL KONFIRMASI ===== -->
+<div class="modal-layer" id="modal-layer">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-judul">
+    <div class="foto-modal" id="modal-foto">🧑</div>
+    <h3 id="modal-judul">Pilih Paslon ini?</h3>
+    <p id="modal-teks">Suara yang sudah dikirim tidak dapat diubah lagi. Pastikan pilihan Anda benar.</p>
+    <div class="modal-aksi">
+      <button class="btn-batal" id="modal-batal">Batal</button>
+      <button class="btn-ya" id="modal-ya">Ya, pilih!</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ================= DATA =================
+  const TOTAL_PEMILIH = 1350;
+  let suara = { 1: 455, 2: 330 };
+  let pilihanSaya = null;          // proteksi 1 suara per sesi
+  let kandidatDipilih = null;      // kandidat yang menunggu konfirmasi
+
+  const $ = (id) => document.getElementById(id);
+  const FOTO = { 1: '🧑', 2: '🧔' };
+  const NAMA = { 1: 'Andi & Budi', 2: 'Citra & Dewi' };
+
+  // ============== COUNTDOWN (contoh: sisa 2j 34m 17d) ==============
+  let sisa = ((2 * 60) + 34) * 60 + 17;
+  setInterval(() => {
+    if (sisa <= 0) return;
+    sisa--;
+    const j = Math.floor(sisa / 3600), m = Math.floor((sisa % 3600) / 60), d = sisa % 60;
+    $('cd-j').textContent = String(j).padStart(2, '0');
+    $('cd-m').textContent = String(m).padStart(2, '0');
+    $('cd-d').textContent = String(d).padStart(2, '0');
+  }, 1000);
+
+  // ============== ANIMASI ANGKA ==============
+  function animasiAngka(el, dari, ke, suffix = '') {
+    const mulai = performance.now(), durasi = 700;
+    function langkah(now) {
+      const t = Math.min((now - mulai) / durasi, 1);
+      const halus = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(dari + (ke - dari) * halus).toLocaleString('id-ID') + suffix;
+      if (t < 1) requestAnimationFrame(langkah);
+    }
+    requestAnimationFrame(langkah);
+  }
+
+  let totalSebelumnya = 0, partSebelumnya = 0;
+
+  // ============== RENDER ==============
+  function render(animasi = true) {
+    const total = suara[1] + suara[2];
+    const p1 = total ? Math.round((suara[1] / total) * 100) : 0;
+    const p2 = 100 - p1;
+    const part = Math.round((total / TOTAL_PEMILIH) * 100);
+    const unggul = p1 >= p2 ? '01' : '02';
+
+    if (animasi) {
+      animasiAngka($('st-total'), totalSebelumnya, total);
+      animasiAngka($('st-part'), partSebelumnya, part, '%');
+    } else {
+      $('st-total').textContent = total.toLocaleString('id-ID');
+      $('st-part').textContent = part + '%';
+    }
+    totalSebelumnya = total;
+    partSebelumnya = part;
+    $('st-unggul').textContent = unggul;
+
+    $('suara-1').textContent = suara[1].toLocaleString('id-ID') + ' suara';
+    $('suara-2').textContent = suara[2].toLocaleString('id-ID') + ' suara';
+    $('pct-1').textContent = p1 + '%';
+    $('pct-2').textContent = p2 + '%';
+    $('bar-1').style.width = p1 + '%';
+    $('bar-2').style.width = p2 + '%';
+
+    // crown untuk unggul sementara
+    $('crown-1').hidden = p1 < p2;
+    $('crown-2').hidden = p2 < p1;
+    $('kartu-1').classList.toggle('unggul', p1 >= p2);
+    $('kartu-2').classList.toggle('unggul', p2 > p1);
+
+    // status pilihan saya
+    $('kartu-1').classList.toggle('terpilih', pilihanSaya === 1);
+    $('kartu-2').classList.toggle('terpilih', pilihanSaya === 2);
+    $('note-1').textContent = pilihanSaya === 1 ? 'Anda memilih Paslon 01' : '';
+    $('note-2').textContent = pilihanSaya === 2 ? 'Anda memilih Paslon 02' : '';
+    [1, 2].forEach((n) => {
+      const btn = $('btn-' + n);
+      const sudah = pilihanSaya !== null;
+      btn.classList.toggle('sudah', sudah);
+      btn.disabled = sudah;
+      if (!sudah) btn.textContent = 'Pilih Paslon 0' + n;
+      else if (pilihanSaya === n) btn.textContent = '✓ Pilihan Anda';
+      else btn.textContent = 'Sudah memberi suara';
+    });
+  }
+
+  // ============== MODAL KONFIRMASI ==============
+  function bukaModal(n) {
+    kandidatDipilih = n;
+    $('modal-foto').textContent = FOTO[n];
+    $('modal-judul').textContent = 'Pilih ' + NAMA[n] + '?';
+    $('modal-teks').textContent = 'Anda akan memilih Paslon 0' + n + ' (' + NAMA[n] + '). Suara yang sudah dikirim tidak dapat diubah lagi.';
+    $('modal-layer').classList.add('tampil');
+  }
+  function tutupModal() {
+    kandidatDipilih = null;
+    $('modal-layer').classList.remove('tampil');
+  }
+  $('modal-batal').addEventListener('click', tutupModal);
+  $('modal-layer').addEventListener('click', (e) => { if (e.target === e.currentTarget) tutupModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') tutupModal(); });
+
+  $('modal-ya').addEventListener('click', () => {
+    if (!kandidatDipilih) return;
+    suara[kandidatDipilih]++;
+    pilihanSaya = kandidatDipilih;
+    tutupModal();
+    render();
+    confetti();
+  });
+
+  // ============== KLIK PILIH ==============
+  document.querySelectorAll('.btn-pilih').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (pilihanSaya) return; // proteksi 1 suara per sesi
+      bukaModal(Number(btn.dataset.kandidat));
+    });
+  });
+
+  // ============== CONFETTI ==============
+  const WARNA = ['#1e9e7e', '#2b6cb0', '#eab308', '#ef6a4c', '#8fd3b6'];
+  function confetti() {
+    for (let i = 0; i < 70; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = WARNA[i % WARNA.length];
+      c.style.borderRadius = Math.random() < .5 ? '50%' : '2px';
+      c.style.animationDuration = (1.6 + Math.random() * 1.6) + 's';
+      c.style.animationDelay = (Math.random() * .3) + 's';
+      c.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 3600);
+    }
+  }
+
+  // ============== SIMULASI SUARA MASUK ==============
+  setInterval(() => {
+    const kandidat = Math.random() < 0.5 ? 1 : 2;
+    suara[kandidat] += Math.random() < 0.15 ? 2 : 1;
+    render();
+  }, 2500);
+
+  render(false);
+</script>
+</body>
+</html>
