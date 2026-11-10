@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pemilihan Raya Online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-700: #1e4f8f;
+    --blue-600: #2b6cb0;
+    --blue-500: #3b82c4;
+    --blue-100: #e3edf7;
+    --teal-500: #1e9e7e;
+    --teal-600: #157f66;
+    --teal-100: #dff3ec;
+    --ink: #1c2b3a;
+    --ink-soft: #55677a;
+    --paper: #f2f5f9;
+    --card: #ffffff;
+    --line: #dde6ee;
+    --radius: 16px;
+    --shadow-sm: 0 1px 2px rgba(28,43,58,.06), 0 2px 8px rgba(28,43,58,.05);
+    --shadow-lg: 0 12px 32px rgba(30,79,143,.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  .app-header {
+    background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
+    color: #fff;
+    padding: 22px clamp(16px, 5vw, 48px);
+  }
+  .app-header h1 {
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    font-weight: 800;
+    letter-spacing: .02em;
+  }
+  .app-header p { font-size: .85rem; opacity: .85; margin-top: 2px; }
+
+  .layout {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 28px clamp(16px, 4vw, 40px) 60px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  @media (min-width: 860px) {
+    .layout { grid-template-columns: 1.4fr 1fr; align-items: start; }
+  }
+
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+  .section-title span { color: var(--blue-600); }
+
+  /* ---- Kandidat ---- */
+  .kandidat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+  }
+
+  .kartu {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 26px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .kartu:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .kartu.terpilih { outline: 3px solid var(--teal-500); outline-offset: -3px; }
+
+  .avatar {
+    width: 92px; height: 92px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--blue-100);
+    border: 3px solid var(--blue-500);
+    margin-bottom: 16px;
+  }
+  .kartu:nth-child(2) .avatar { background: var(--teal-100); border-color: var(--teal-500); }
+  .avatar svg { width: 44px; height: 44px; fill: none; stroke: var(--blue-600); stroke-width: 1.6; }
+  .kartu:nth-child(2) .avatar svg { stroke: var(--teal-600); }
+
+  .paslon-nomor { font-size: 1.15rem; font-weight: 800; }
+  .paslon-nama { font-size: .95rem; color: var(--ink-soft); margin: 2px 0 14px; }
+
+  .visi {
+    font-size: .8rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    min-height: 66px;
+    margin-bottom: 18px;
+  }
+  .visi strong { color: var(--ink); }
+
+  .btn-pilih {
+    margin-top: auto;
+    width: 100%;
+    padding: 12px 16px;
+    font: inherit;
+    font-weight: 700;
+    font-size: .85rem;
+    color: #fff;
+    background: var(--teal-500);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .2s ease, transform .1s ease;
+  }
+  .btn-pilih:hover { background: var(--teal-600); }
+  .btn-pilih:active { transform: scale(.97); }
+  .btn-pilih:disabled { background: #b7c6d4; cursor: not-allowed; }
+  .kartu.terpilih .btn-pilih { background: var(--blue-600); }
+
+  .vote-note { margin-top: 10px; font-size: .72rem; color: var(--ink-soft); min-height: 1em; }
+
+  /* ---- Hasil ---- */
+  .panel-hasil {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 24px;
+  }
+  .panel-hasil h2 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .live-badge {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .7rem;
+    font-weight: 700;
+    color: var(--teal-600);
+    background: var(--teal-100);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .live-badge::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--teal-500);
+    animation: berkedip 1.6s ease-in-out infinite;
+  }
+  @keyframes berkedip { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+  .total-suara {
+    margin: 14px 0 20px;
+    font-size: .85rem;
+    color: var(--ink-soft);
+  }
+  .total-suara b { color: var(--ink); font-size: 1.05rem; }
+
+  .hasil-baris { margin-bottom: 20px; }
+  .hasil-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: .82rem;
+    margin-bottom: 8px;
+  }
+  .hasil-label b { font-weight: 700; }
+  .hasil-label span { color: var(--ink-soft); }
+
+  .track {
+    height: 14px;
+    background: #e8eef4;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: var(--blue-500);
+    transition: width .8s cubic-bezier(.22,1,.36,1);
+  }
+  .fill.teal { background: var(--teal-500); }
+
+  .hasil-pct {
+    text-align: right;
+    font-size: .95rem;
+    font-weight: 800;
+    margin-top: 6px;
+  }
+  .hasil-pct.blue { color: var(--blue-600); }
+  .hasil-pct.teal { color: var(--teal-600); }
+
+  .reset-btn {
+    margin-top: 6px;
+    width: 100%;
+    padding: 10px;
+    font: inherit;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .reset-btn:hover { border-color: var(--blue-500); color: var(--blue-600); }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: .75rem;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>PEMILIHAN RAYA ONLINE</h1>
+  <p>Gunakan hak suara Anda — hasil dihitung secara real-time</p>
+</header>
+
+<main class="layout">
+  <!-- Bilik Suara -->
+  <section aria-labelledby="judul-bilik">
+    <h2 class="section-title" id="judul-bilik">Bilik Suara: <span>Kandidat Ketua &amp; Wakil</span></h2>
+    <div class="kandidat-grid">
+
+      <article class="kartu" id="kartu-1">
+        <div class="avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="16.5" cy="9" r="2.4"/><path d="M15.5 13.6c2.4.2 4.3 1.8 4.9 4.4"/></svg>
+        </div>
+        <div class="paslon-nomor">PASLON 01</div>
+        <div class="paslon-nama">Andi &amp; Budi</div>
+        <p class="visi"><strong>Visi:</strong> Meningkatkan kesejahteraan bersama, membangun ekonomi kreatif, dan mewujudkan lingkungan yang bersih serta asri bagi seluruh warga.</p>
+        <button class="btn-pilih" data-kandidat="1">PILIH PASLON 01</button>
+        <p class="vote-note" id="note-1"></p>
+      </article>
+
+      <article class="kartu" id="kartu-2">
+        <div class="avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="16.5" cy="9" r="2.4"/><path d="M15.5 13.6c2.4.2 4.3 1.8 4.9 4.4"/></svg>
+        </div>
+        <div class="paslon-nomor">PASLON 02</div>
+        <div class="paslon-nama">Citra &amp; Dewi</div>
+        <p class="visi"><strong>Visi:</strong> Mengutamakan pendidikan digital, memperkuat gotong royong warga, dan membuka peluang kerja baru bagi generasi muda.</p>
+        <button class="btn-pilih" data-kandidat="2">PILIH PASLON 02</button>
+        <p class="vote-note" id="note-2"></p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Hasil Real-time -->
+  <aside class="panel-hasil" aria-labelledby="judul-hasil">
+    <h2 id="judul-hasil">
+      Hasil Suara Sementara
+      <span class="live-badge">LIVE</span>
+    </h2>
+    <p class="total-suara">Total suara masuk: <b id="total">0</b></p>
+
+    <div class="hasil-baris">
+      <div class="hasil-label">
+        <b>Andi &amp; Budi</b><span>Paslon 01 · <span id="suara-1">0</span> suara</span>
+      </div>
+      <div class="track"><div class="fill" id="bar-1"></div></div>
+      <div class="hasil-pct blue" id="pct-1">0%</div>
+    </div>
+
+    <div class="hasil-baris">
+      <div class="hasil-label">
+        <b>Citra &amp; Dewi</b><span>Paslon 02 · <span id="suara-2">0</span> suara</span>
+      </div>
+      <div class="track"><div class="fill teal" id="bar-2"></div></div>
+      <div class="hasil-pct teal" id="pct-2">0%</div>
+    </div>
+
+    <button class="reset-btn" id="reset">Reset suara saya</button>
+  </aside>
+</main>
+
+<footer>Pemilihan Raya Online — latihan tampilan web. Suara pemantau disimulasikan secara lokal.</footer>
+
+<script>
+  // ---- Data suara ----
+  // Suara pemantau (simulasi pemilih lain yang masuk secara berkala)
+  let suara = { 1: 455, 2: 330 };
+  // Hak suara pengunjung: null = belum memilih, 1 atau 2
+  let pilihanSaya = null;
+
+  const $ = (id) => document.getElementById(id);
+
+  function animasiAngka(el, dari, ke, durasi = 700) {
+    const mulai = performance.now();
+    function langkah(sekarang) {
+      const t = Math.min((sekarang - mulai) / durasi, 1);
+      const halus = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      el.textContent = Math.round(dari + (ke - dari) * halus).toLocaleString('id-ID');
+      if (t < 1) requestAnimationFrame(langkah);
+    }
+    requestAnimationFrame(langkah);
+  }
+
+  let totalSebelumnya = 0;
+
+  function render(animasi = true) {
+    const total = suara[1] + suara[2];
+    const p1 = total ? Math.round((suara[1] / total) * 100) : 0;
+    const p2 = total ? 100 - p1 : 0;
+
+    if (animasi) animasiAngka($('total'), totalSebelumnya, total);
+    else $('total').textContent = total.toLocaleString('id-ID');
+    totalSebelumnya = total;
+
+    $('suara-1').textContent = suara[1].toLocaleString('id-ID');
+    $('suara-2').textContent = suara[2].toLocaleString('id-ID');
+
+    $('bar-1').style.width = p1 + '%';
+    $('bar-2').style.width = p2 + '%';
+    $('pct-1').textContent = p1 + '%';
+    $('pct-2').textContent = p2 + '%';
+
+    // Status kartu sesuai pilihan pengunjung
+    $('kartu-1').classList.toggle('terpilih', pilihanSaya === 1);
+    $('kartu-2').classList.toggle('terpilih', pilihanSaya === 2);
+    $('note-1').textContent = pilihanSaya === 1 ? 'Anda memilih Paslon 01' : '';
+    $('note-2').textContent = pilihanSaya === 2 ? 'Anda memilih Paslon 02' : '';
+  }
+
+  // ---- Pilih kandidat ----
+  document.querySelectorAll('.btn-pilih').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const pilih = Number(btn.dataset.kandidat);
+      if (pilihanSaya === pilih) return;
+
+      // Batalkan suara lama jika berganti pilihan
+      if (pilihanSaya) suara[pilihanSaya]--;
+      suara[pilih]++;
+      pilihanSaya = pilih;
+      render();
+    });
+  });
+
+  // ---- Reset ----
+  $('reset').addEventListener('click', () => {
+    if (!pilihanSaya) return;
+    suara[pilihanSaya]--;
+    pilihanSaya = null;
+    render();
+  });
+
+  // ---- Simulasi suara masuk secara real-time ----
+  setInterval(() => {
+    const kandidat = Math.random() < 0.5 ? 1 : 2;
+    const jumlah = Math.random() < 0.15 ? 2 : 1; // kadang masuk 2 sekaligus
+    suara[kandidat] += jumlah;
+    render();
+  }, 2500);
+
+  render(false);
+</script>
+</body>
+</html>
